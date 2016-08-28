@@ -83,8 +83,9 @@ BasicGame.Game.prototype = {
     },
 
     clickSquare: function () {
-        // console.log(this.gameObj.turn);
-        // console.log(this.squareObj);
+        // Context: {gameObj:this, squareObj:this.squares[key]}
+        // console.log(this.gameObj.turn); // access to this.turn
+        // console.log(this.squareObj); // access to this.squares[key]
 
         // Set occupiedBy
         // Render O and X
@@ -95,6 +96,9 @@ BasicGame.Game.prototype = {
             this.squareObj.occupiedBy = 'X';
             this.gameObj.renderX(this.squareObj);
         }
+
+        // Unbind events to prevent duplicate cell click
+        this.squareObj.spr.events.onInputDown.removeAll();
 
         // Change turns
         this.gameObj.turn = !(this.gameObj.turn);
