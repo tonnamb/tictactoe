@@ -74,10 +74,10 @@ BasicGame.Game.prototype = {
 
     createSquareObj: function (row, col) {
         return {
-            spr: this.add.sprite(125+(row-1)*200, 25+(col-1)*200, 'square'),
+            spr: this.add.sprite(165+(row-1)*160, 65+(col-1)*160, 'square'),
             row: row,
             col: col,
-            center: [200+(row-1)*200, 100+(col-1)*200],
+            center: [165+75+(row-1)*160, 65+75+(col-1)*160],
             occupiedBy: ''
         }
     },
@@ -86,15 +86,14 @@ BasicGame.Game.prototype = {
         // console.log(this.gameObj.turn);
         // console.log(this.squareObj);
 
-        // Add O and X
+        // Set occupiedBy
+        // Render O and X
         if (this.gameObj.turn) {
-            var circle = this.gameObj.add.sprite(this.squareObj.center[0], this.squareObj.center[1], 'circle');
-            circle.anchor.x = 0.5;
-            circle.anchor.y = 0.5;
+            this.squareObj.occupiedBy = 'O';
+            this.gameObj.renderO(this.squareObj);
         } else {
-            var cross = this.gameObj.add.sprite(this.squareObj.center[0], this.squareObj.center[1], 'cross');
-            cross.anchor.x = 0.5;
-            cross.anchor.y = 0.5;
+            this.squareObj.occupiedBy = 'X';
+            this.gameObj.renderX(this.squareObj);
         }
 
         // Change turns
@@ -102,6 +101,16 @@ BasicGame.Game.prototype = {
 
     },
 
+    renderO: function (squareObj) {
+        var circle = this.add.sprite(squareObj.center[0], squareObj.center[1], 'circle');
+        circle.anchor.x = 0.5;
+        circle.anchor.y = 0.5;
+    },
 
+    renderX: function (squareObj) {
+        var cross = this.add.sprite(squareObj.center[0], squareObj.center[1], 'cross');
+        cross.anchor.x = 0.5;
+        cross.anchor.y = 0.5;
+    }
 
 };
