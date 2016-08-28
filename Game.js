@@ -34,8 +34,6 @@ BasicGame.Game.prototype = {
 
         console.log("Game start!");
 
-        //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-
         // Create squares
         this.squares.s11 = this.createSquareObj(1, 1);
         this.squares.s12 = this.createSquareObj(1, 2);
@@ -72,12 +70,12 @@ BasicGame.Game.prototype = {
 
     },
 
-    createSquareObj: function (row, col) {
+    createSquareObj: function (x, y) {
         return {
-            spr: this.add.sprite(165+(row-1)*160, 65+(col-1)*160, 'square'),
-            row: row,
-            col: col,
-            center: [165+75+(row-1)*160, 65+75+(col-1)*160],
+            spr: this.add.sprite(165+(x-1)*160, 65+(y-1)*160, 'square'),
+            x: x,
+            y: y,
+            center: [165+75+(x-1)*160, 65+75+(y-1)*160],
             occupiedBy: ''
         }
     },
@@ -102,6 +100,8 @@ BasicGame.Game.prototype = {
 
         // Change turns
         this.gameObj.turn = !(this.gameObj.turn);
+
+        console.log(this.gameObj.squares)
 
     },
 
