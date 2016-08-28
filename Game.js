@@ -30,6 +30,7 @@ BasicGame.Game = function (game) {
     this.restartButton = null;
     this.nextGameButton = null;
     this.marksOX = [];
+    this.winDrawText = null;
 
 };
 
@@ -109,6 +110,7 @@ BasicGame.Game.prototype = {
                 this.gameObj.renderScoreBoard();
                 this.gameObj.unbindAllSquares();
                 this.gameObj.createNextGameButton();
+                this.gameObj.renderWinDraw('win', 'O');
             }
         } else {
             this.squareObj.occupiedBy = 'X';
@@ -118,15 +120,17 @@ BasicGame.Game.prototype = {
                 this.gameObj.renderScoreBoard();
                 this.gameObj.unbindAllSquares();
                 this.gameObj.createNextGameButton();
+                this.gameObj.renderWinDraw('win', 'X');
             }
         }
 
         if (this.gameObj.checkDraw()) {
             this.gameObj.unbindAllSquares();
             this.gameObj.createNextGameButton();
+            this.gameObj.renderWinDraw('draw');
         }
 
-        // Unbind events to prevent duplicate cell click
+        // Unbind event to prevent clicking on cells already clicked
         this.squareObj.spr.events.onInputDown.removeAll();
 
         // Change turns
@@ -150,6 +154,20 @@ BasicGame.Game.prototype = {
 
     renderScoreBoard: function () {
         this.scoreText.setText("Score: O = " + this.scores.O + ", X = " + this.scores.X);
+    },
+
+    renderWinDraw: function (winOrDraw, who) {
+        if (winOrDraw === 'win') {
+            this.winDrawText = this.add.text(400, 590, who + " wins!",
+            { font: "30px Arial", align: "center", fill: "#fff"});
+            this.winDrawText.anchor.x = 0.5;
+            this.winDrawText.anchor.y = 1.0;
+        } else if (winOrDraw === 'draw') {
+            this.winDrawText = this.add.text(400, 590, "Draw!",
+            { font: "30px Arial", align: "center", fill: "#fff"});
+            this.winDrawText.anchor.x = 0.5;
+            this.winDrawText.anchor.y = 1.0;
+        }
     },
 
     unbindAllSquares: function () {
@@ -179,6 +197,7 @@ BasicGame.Game.prototype = {
         // Destroy
         this.nextGameButton.destroy();
         this.destroyOX();
+        this.winDrawText.destroy();
 
     },
 
