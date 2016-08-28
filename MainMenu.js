@@ -23,8 +23,8 @@ BasicGame.MainMenu.prototype = {
 
 		//  this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');
 
-		var playText = this.add.text(400, 300, "Click to play with a friend", 
-		{ font: "65px Arial", fill: "#fff" , align: "center"});
+		var playText = this.add.text(400, 300, " Click to play with a friend ", 
+		{ font: "65px Arial", fill: "#fff" , align: "center", backgroundColor: "#2f4f4f"});
 		
 		playText.anchor.x = 0.5;
 		playText.anchor.y = 0.5;
