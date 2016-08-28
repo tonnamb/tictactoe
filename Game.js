@@ -90,9 +90,15 @@ BasicGame.Game.prototype = {
         if (this.gameObj.turn) {
             this.squareObj.occupiedBy = 'O';
             this.gameObj.renderO(this.squareObj);
+            if (this.gameObj.checkWin('O')) {
+                console.log('O wins!');
+            }
         } else {
             this.squareObj.occupiedBy = 'X';
             this.gameObj.renderX(this.squareObj);
+            if (this.gameObj.checkWin('X')) {
+                console.log('X wins!');
+            }
         }
 
         // Unbind events to prevent duplicate cell click
@@ -100,8 +106,6 @@ BasicGame.Game.prototype = {
 
         // Change turns
         this.gameObj.turn = !(this.gameObj.turn);
-
-        console.log(this.gameObj.squares)
 
     },
 
@@ -115,6 +119,49 @@ BasicGame.Game.prototype = {
         var cross = this.add.sprite(squareObj.center[0], squareObj.center[1], 'cross');
         cross.anchor.x = 0.5;
         cross.anchor.y = 0.5;
+    },
+
+    checkWin: function (OX) {
+        /*
+        Win cases:
+        [1, 1] [2, 1] [3, 1]
+        [1, 1] [1, 2] [1, 3]
+        [1, 1] [2, 2] [3, 3]
+
+        [1, 2] [2, 2] [3, 2]
+
+        [1, 3] [2, 3] [3, 3]
+        [1, 3] [2, 2] [3, 1]
+
+        [2, 1] [2, 2] [2, 3]
+
+        [3, 1] [3, 2] [3, 3]
+        */
+        var winBool = false;
+        
+        if (this.squares.s11.occupiedBy === OX) {
+            if (this.squares.s21.occupiedBy === OX && this.squares.s31.occupiedBy === OX) {
+                winBool = true;
+            } else if (this.squares.s12.occupiedBy === OX && this.squares.s13.occupiedBy === OX) {
+                winBool = true;
+            } else if (this.squares.s11.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
+                winBool = true;
+            }
+        } else if (this.squares.s12.occupiedBy === OX && this.squares.s22.occupiedBy === OX && this.squares.s32.occupiedBy === OX) {
+            winBool = true;
+        } else if (this.squares.s13.occupiedBy === OX) {
+            if (this.squares.s23.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
+                winBool = true;
+            } else if (this.squares.s22.occupiedBy === OX && this.squares.s31.occupiedBy === OX) {
+                winBool = true;
+            }
+        } else if (this.squares.s21.occupiedBy === OX && this.squares.s22.occupiedBy === OX && this.squares.s23.occupiedBy === OX) {
+            winBool = true;
+        } else if (this.squares.s31.occupiedBy === OX && this.squares.s32.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
+            winBool = true;
+        }
+
+        return winBool;
     }
 
 };
