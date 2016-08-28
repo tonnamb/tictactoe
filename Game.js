@@ -25,6 +25,8 @@ BasicGame.Game = function (game) {
 
     this.squares = {};
     this.turn = true; // true = 'O', false = 'X'
+    this.scores = {};
+    this.scoreText = '';
 
 };
 
@@ -51,6 +53,14 @@ BasicGame.Game.prototype = {
             this.squares[key].spr.inputEnabled = true;
             this.squares[key].spr.events.onInputDown.add(this.clickSquare, {gameObj:this, squareObj:this.squares[key]})
         }
+
+        // Set initial scores as zero
+        this.scores.O = 0;
+        this.scores.X = 0;
+
+        // Render scoreboard
+        this.scoreText = this.add.text(10, 10, "Score: O = " + this.scores.O + ", X = " + this.scores.X, 
+        { font: "30px Arial", fill: "#fff" });
 
     },
 
