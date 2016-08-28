@@ -29,6 +29,7 @@ BasicGame.Game = function (game) {
     this.scoreText = null;
     this.restartButton = null;
     this.nextGameButton = null;
+    this.marksOX = [];
 
 };
 
@@ -53,7 +54,7 @@ BasicGame.Game.prototype = {
         this.squares.s32 = this.createSquareObj(3, 2);
         this.squares.s33 = this.createSquareObj(3, 3);
 
-        // Bind events to squres
+        // Bind events to squares
         for (var key in this.squares) {
             if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
             this.squares[key].spr.inputEnabled = true;
@@ -107,6 +108,8 @@ BasicGame.Game.prototype = {
 
         // Set occupiedBy
         // Render O and X
+        // 'O': this.gameObj.turn = true
+        // 'X': this.gameObj.turn = false
         if (this.gameObj.turn) {
             this.squareObj.occupiedBy = 'O';
             this.gameObj.renderO(this.squareObj);
@@ -114,6 +117,7 @@ BasicGame.Game.prototype = {
                 this.gameObj.scores.O += 1;
                 this.gameObj.renderScoreBoard();
                 this.gameObj.unbindAllSquares();
+                this.gameObj.createNextGameButton();
             }
         } else {
             this.squareObj.occupiedBy = 'X';
@@ -122,7 +126,13 @@ BasicGame.Game.prototype = {
                 this.gameObj.scores.X += 1;
                 this.gameObj.renderScoreBoard();
                 this.gameObj.unbindAllSquares();
+                this.gameObj.createNextGameButton();
             }
+        }
+
+        if (this.gameObj.checkDraw) {
+            this.gameObj.unbindAllSquares();
+            this.gameObj.createNextGameButton();
         }
 
         // Unbind events to prevent duplicate cell click
@@ -137,22 +147,54 @@ BasicGame.Game.prototype = {
         var circle = this.add.sprite(squareObj.center[0], squareObj.center[1], 'circle');
         circle.anchor.x = 0.5;
         circle.anchor.y = 0.5;
+        this.marksOX.push(circle);
     },
 
     renderX: function (squareObj) {
         var cross = this.add.sprite(squareObj.center[0], squareObj.center[1], 'cross');
         cross.anchor.x = 0.5;
         cross.anchor.y = 0.5;
+        this.marksOX.push(cross);
     },
 
-    renderScoreBoard: function() {
+    renderScoreBoard: function () {
         this.scoreText.setText("Score: O = " + this.scores.O + ", X = " + this.scores.X);
     },
 
-    unbindAllSquares: function() {
+    unbindAllSquares: function () {
         for (var key in this.squares) {
             if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
             this.squares[key].spr.events.onInputDown.removeAll();
+        }
+    },
+
+    createNextGameButton: function() {
+        this.nextGameButton = this.add.text(10, 590, " Next game ",
+        { font: "30px Arial", fill: "#fff", backgroundColor: "#2f4f4f"});
+        this.nextGameButton.anchor.y = 1.0;
+        this.nextGameButton.inputEnabled = true;
+        this.nextGameButton.events.onInputDown.add(this.nextGame, this);
+    },
+
+    nextGame: function () {
+        // Bind events to squares
+        for (var key in this.squares) {
+            if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
+            this.squares[key].spr.inputEnabled = true;
+            this.squares[key].spr.events.onInputDown.add(this.clickSquare, {gameObj:this, squareObj:this.squares[key]});
+            this.squares[key].occupiedBy = '';
+        }
+
+        // Destroy
+        this.nextGameButton.destroy();
+        this.destroyOX();
+
+    },
+
+    destroyOX: function () {
+        var len = this.marksOX.length;
+        for (var i = 0; i < len; i += 1) {
+            this.marksOX[i].destroy();
         }
     },
 
@@ -197,6 +239,19 @@ BasicGame.Game.prototype = {
         }
 
         return winBool;
+    },
+
+    checkDraw: function () {
+        var drawBool = true
+
+        for (var key in this.squares) {
+            if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
+            if (this.squares[key].occupiedBy === '') {
+                drawBool = false;
+            }
+        }
+
+        return drawBool;
     }
 
 };
