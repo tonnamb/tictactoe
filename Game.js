@@ -26,7 +26,8 @@ BasicGame.Game = function (game) {
     this.squares = {};
     this.turn = true; // true = 'O', false = 'X'
     this.scores = {};
-    this.scoreText = '';
+    this.scoreText = null;
+    this.restartButton = null;
 
 };
 
@@ -36,7 +37,11 @@ BasicGame.Game.prototype = {
 
         console.log("Game start!");
 
-        // Create squares
+        // Set initial scores as zero
+        this.scores.O = 0;
+        this.scores.X = 0;
+
+        // Squares
         this.squares.s11 = this.createSquareObj(1, 1);
         this.squares.s12 = this.createSquareObj(1, 2);
         this.squares.s13 = this.createSquareObj(1, 3);
@@ -47,20 +52,24 @@ BasicGame.Game.prototype = {
         this.squares.s32 = this.createSquareObj(3, 2);
         this.squares.s33 = this.createSquareObj(3, 3);
 
-        // Bind events
+        // Bind events to squres
         for (var key in this.squares) {
             if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
             this.squares[key].spr.inputEnabled = true;
             this.squares[key].spr.events.onInputDown.add(this.clickSquare, {gameObj:this, squareObj:this.squares[key]});
         }
 
-        // Set initial scores as zero
-        this.scores.O = 0;
-        this.scores.X = 0;
-
-        // Render scoreboard
+        // scoreboard
         this.scoreText = this.add.text(10, 10, "Score: O = " + this.scores.O + ", X = " + this.scores.X, 
         { font: "30px Arial", fill: "#fff" });
+
+        // restart button
+        this.restartButton = this.add.text(790, 590, " Restart game ",
+        { font: "30px Arial", fill: "#fff", backgroundColor: "#2f4f4f"});
+        this.restartButton.anchor.x = 1.0;
+        this.restartButton.anchor.y = 1.0;
+        this.restartButton.inputEnabled = true;
+        this.restartButton.events.onInputDown.add(this.quitGame, this);
 
     },
 
