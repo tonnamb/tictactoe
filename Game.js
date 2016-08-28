@@ -102,29 +102,20 @@ BasicGame.Game.prototype = {
         // Render O and X
         // 'O': this.gameObj.turn = true
         // 'X': this.gameObj.turn = false
+        var whichTurn = 'X';
         if (this.gameObj.turn) {
-            this.squareObj.occupiedBy = 'O';
-            this.gameObj.renderO(this.squareObj);
-            if (this.gameObj.checkWin('O')) {
-                this.gameObj.scores.O += 1;
-                this.gameObj.renderScoreBoard();
-                this.gameObj.unbindAllSquares();
-                this.gameObj.createNextGameButton();
-                this.gameObj.renderWinDraw('win', 'O');
-            }
-        } else {
-            this.squareObj.occupiedBy = 'X';
-            this.gameObj.renderX(this.squareObj);
-            if (this.gameObj.checkWin('X')) {
-                this.gameObj.scores.X += 1;
-                this.gameObj.renderScoreBoard();
-                this.gameObj.unbindAllSquares();
-                this.gameObj.createNextGameButton();
-                this.gameObj.renderWinDraw('win', 'X');
-            }
+            whichTurn = 'O';
         }
-
-        if (this.gameObj.checkDraw()) {
+        
+        this.squareObj.occupiedBy = whichTurn;
+        this.gameObj.renderOX(this.squareObj, whichTurn);
+        if (this.gameObj.checkWin(whichTurn)) {
+            this.gameObj.scores[whichTurn] += 1;
+            this.gameObj.renderScoreBoard();
+            this.gameObj.unbindAllSquares();
+            this.gameObj.createNextGameButton();
+            this.gameObj.renderWinDraw('win', whichTurn);
+        } else if (this.gameObj.checkDraw()) {
             this.gameObj.unbindAllSquares();
             this.gameObj.createNextGameButton();
             this.gameObj.renderWinDraw('draw');
@@ -138,18 +129,16 @@ BasicGame.Game.prototype = {
 
     },
 
-    renderO: function (squareObj) {
-        var circle = this.add.sprite(squareObj.center[0], squareObj.center[1], 'circle');
-        circle.anchor.x = 0.5;
-        circle.anchor.y = 0.5;
-        this.marksOX.push(circle);
-    },
-
-    renderX: function (squareObj) {
-        var cross = this.add.sprite(squareObj.center[0], squareObj.center[1], 'cross');
-        cross.anchor.x = 0.5;
-        cross.anchor.y = 0.5;
-        this.marksOX.push(cross);
+    renderOX: function (squareObj, turn) {
+        var xo = null;
+        if (turn === 'O') {
+            xo = this.add.sprite(squareObj.center[0], squareObj.center[1], 'circle');
+        } else if (turn === 'X') {
+            xo = this.add.sprite(squareObj.center[0], squareObj.center[1], 'cross');
+        }
+        xo.anchor.x = 0.5;
+        xo.anchor.y = 0.5;
+        this.marksOX.push(xo);
     },
 
     renderScoreBoard: function () {
