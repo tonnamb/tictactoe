@@ -28,6 +28,7 @@ BasicGame.Game = function (game) {
     this.scores = {};
     this.scoreText = null;
     this.restartButton = null;
+    this.nextGameButton = null;
 
 };
 
@@ -111,17 +112,18 @@ BasicGame.Game.prototype = {
             this.gameObj.renderO(this.squareObj);
             if (this.gameObj.checkWin('O')) {
                 this.gameObj.scores.O += 1;
+                this.gameObj.renderScoreBoard();
+                this.gameObj.unbindAllSquares();
             }
         } else {
             this.squareObj.occupiedBy = 'X';
             this.gameObj.renderX(this.squareObj);
             if (this.gameObj.checkWin('X')) {
                 this.gameObj.scores.X += 1;
+                this.gameObj.renderScoreBoard();
+                this.gameObj.unbindAllSquares();
             }
         }
-
-        // Render scoreboard
-        this.gameObj.scoreText.setText("Score: O = " + this.gameObj.scores.O + ", X = " + this.gameObj.scores.X);
 
         // Unbind events to prevent duplicate cell click
         this.squareObj.spr.events.onInputDown.removeAll();
@@ -141,6 +143,17 @@ BasicGame.Game.prototype = {
         var cross = this.add.sprite(squareObj.center[0], squareObj.center[1], 'cross');
         cross.anchor.x = 0.5;
         cross.anchor.y = 0.5;
+    },
+
+    renderScoreBoard: function() {
+        this.scoreText.setText("Score: O = " + this.scores.O + ", X = " + this.scores.X);
+    },
+
+    unbindAllSquares: function() {
+        for (var key in this.squares) {
+            if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
+            this.squares[key].spr.events.onInputDown.removeAll();
+        }
     },
 
     checkWin: function (OX) {
