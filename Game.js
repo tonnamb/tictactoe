@@ -51,7 +51,7 @@ BasicGame.Game.prototype = {
         for (var key in this.squares) {
             if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
             this.squares[key].spr.inputEnabled = true;
-            this.squares[key].spr.events.onInputDown.add(this.clickSquare, {gameObj:this, squareObj:this.squares[key]})
+            this.squares[key].spr.events.onInputDown.add(this.clickSquare, {gameObj:this, squareObj:this.squares[key]});
         }
 
         // Set initial scores as zero
@@ -91,7 +91,7 @@ BasicGame.Game.prototype = {
     },
 
     clickSquare: function () {
-        // Context: {gameObj:this, squareObj:this.squares[key]}
+        // Context: {gameObj:this, squareObj:this.squares[key]}, i.e. 'this' refers to the object
         // console.log(this.gameObj.turn); // access to this.turn
         // console.log(this.squareObj); // access to this.squares[key]
 
@@ -101,15 +101,18 @@ BasicGame.Game.prototype = {
             this.squareObj.occupiedBy = 'O';
             this.gameObj.renderO(this.squareObj);
             if (this.gameObj.checkWin('O')) {
-                console.log('O wins!');
+                this.gameObj.scores.O += 1;
             }
         } else {
             this.squareObj.occupiedBy = 'X';
             this.gameObj.renderX(this.squareObj);
             if (this.gameObj.checkWin('X')) {
-                console.log('X wins!');
+                this.gameObj.scores.X += 1;
             }
         }
+
+        // Render scoreboard
+        this.gameObj.scoreText.setText("Score: O = " + this.gameObj.scores.O + ", X = " + this.gameObj.scores.X);
 
         // Unbind events to prevent duplicate cell click
         this.squareObj.spr.events.onInputDown.removeAll();
