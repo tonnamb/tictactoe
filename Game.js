@@ -25,12 +25,14 @@ BasicGame.Game = function (game) {
 
     this.squares = {};
     this.turn = true; // true = 'O', false = 'X'
+    this.startTurn = true; // allows alternating start turns
     this.scores = {};
     this.scoreText = null;
     this.restartButton = null;
     this.nextGameButton = null;
     this.marksOX = [];
     this.winDrawText = null;
+    this.turnText = null;
 
 };
 
@@ -74,6 +76,11 @@ BasicGame.Game.prototype = {
         this.restartButton.inputEnabled = true;
         this.restartButton.events.onInputDown.add(this.quitGame, this);
 
+        // turn text
+        this.turnText = this.add.text(790, 10, "Turn: " + this.turnToOX(),
+        { font: "30px Arial", align: "right", fill: "#fff"});
+        this.turnText.anchor.x = 1.0;
+
     },
 
     quitGame: function (pointer) {
@@ -102,11 +109,14 @@ BasicGame.Game.prototype = {
         // Render O and X
         // 'O': this.gameObj.turn = true
         // 'X': this.gameObj.turn = false
-        var whichTurn = 'X';
-        if (this.gameObj.turn) {
-            whichTurn = 'O';
-        }
-        
+
+        // Cache current turn
+        var whichTurn = this.gameObj.turnToOX()
+
+        // Change turns
+        this.gameObj.turn = !(this.gameObj.turn);
+        this.gameObj.renderTurnText();
+
         this.squareObj.occupiedBy = whichTurn;
         this.gameObj.renderOX(this.squareObj, whichTurn);
         if (this.gameObj.checkWin(whichTurn)) {
@@ -115,17 +125,16 @@ BasicGame.Game.prototype = {
             this.gameObj.unbindAllSquares();
             this.gameObj.createNextGameButton();
             this.gameObj.renderWinDraw('win', whichTurn);
+            this.gameObj.hideTurnText();
         } else if (this.gameObj.checkDraw()) {
             this.gameObj.unbindAllSquares();
             this.gameObj.createNextGameButton();
             this.gameObj.renderWinDraw('draw');
+            this.gameObj.hideTurnText();
         }
 
         // Unbind event to prevent clicking on cells already clicked
         this.squareObj.spr.events.onInputDown.removeAll();
-
-        // Change turns
-        this.gameObj.turn = !(this.gameObj.turn);
 
     },
 
@@ -159,6 +168,23 @@ BasicGame.Game.prototype = {
         }
     },
 
+    renderTurnText: function () {
+        this.turnText.setText("Turn: " + this.turnToOX());
+    },
+
+    hideTurnText: function () {
+        this.turnText.setText("");
+    },
+
+    turnToOX: function () {
+        var whichTurn = 'X';
+        if (this.turn) {
+            whichTurn = 'O';
+        }
+        
+        return whichTurn; 
+    },
+
     unbindAllSquares: function () {
         for (var key in this.squares) {
             if (!this.squares.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
@@ -188,6 +214,12 @@ BasicGame.Game.prototype = {
         this.destroyOX();
         this.winDrawText.destroy();
 
+        // alternate who start
+        this.startTurn = !(this.startTurn);
+        this.turn = this.startTurn;
+
+        // show turn text
+        this.renderTurnText();
     },
 
     destroyOX: function () {
