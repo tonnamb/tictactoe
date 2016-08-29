@@ -18,12 +18,12 @@ BasicGame.Boot.prototype = {
 
         if (this.game.device.desktop)
         {
-            //  If you have any desktop specific settings, they can go in here
+            //  Desktop settings
             this.scale.pageAlignHorizontally = true;
         }
         else
         {
-            //  Same goes for mobile settings.
+            //  Mobile settings.
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.setMinMax(400, 300, 800, 600);
             this.scale.forceLandscape = true;
