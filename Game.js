@@ -2,8 +2,8 @@
 BasicGame.Game = function (game) {
 
     this.squares = {};
-    this.turn = true; // true = 'O', false = 'X'
-    this.startTurn = true; // allows alternating start turns
+    this.turn = null;
+    this.startTurn = null;
     this.scores = {};
     this.scoreText = null;
     this.restartButton = null;
@@ -23,6 +23,10 @@ BasicGame.Game.prototype = {
         // Set initial scores as zero
         this.scores.O = 0;
         this.scores.X = 0;
+
+        // Start turn
+        this.turn = true; // true = 'O', false = 'X'
+        this.startTurn = true; // allows alternating start turns
 
         // Squares
         this.squares.s11 = this.createSquareObj(1, 1);

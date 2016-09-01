@@ -8,6 +8,7 @@
 	<script src="Preloader.js"></script>
 	<script src="MainMenu.js"></script>
 	<script src="Game.js"></script>
+	<script src="GameAI.js"></script>
 </head>
 <body>
 
@@ -27,6 +28,7 @@ window.onload = function() {
 	game.state.add('Preloader', BasicGame.Preloader);
 	game.state.add('MainMenu', BasicGame.MainMenu);
 	game.state.add('Game', BasicGame.Game);
+	game.state.add('GameAI', BasicGame.GameAI);
 
 	//	Now start the Boot state.
 	game.state.start('Boot');
