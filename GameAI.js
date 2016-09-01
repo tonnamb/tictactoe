@@ -84,13 +84,13 @@ BasicGame.GameAI.prototype = {
         this.restartButton.inputEnabled = true;
         this.restartButton.events.onInputDown.add(this.quitGame, this);
 
+        // Bind events to squares
+        this.bindAllSquares();
+
         // if computer's turn
         if (!this.iWillStartFirst) {
             this.callAI();
-        }
-
-        // Bind events to squares
-        this.bindAllSquares();
+        }        
 
         // testing
         /*
