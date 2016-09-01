@@ -111,20 +111,18 @@ BasicGame.GameAI.prototype = {
         console.log(this.checkWin('O', fifthState));
         */
         /*
+        // O's turn first (Player)
         var state1 = this.squares.getNewState({x:1, y:1});
         var state2 = state1.getNewState({x:1, y:2});
         var state3 = state2.getNewState({x:1, y:3});
-        var state4 = state3.getNewState({x:2, y:2});
-        var state5 = state4.getNewState({x:2, y:3});
-        var state6 = state5.getNewState({x:2, y:1});
+        var state4 = state3.getNewState({x:2, y:1});
+        var state5 = state4.getNewState({x:2, y:2});
+        var state6 = state5.getNewState({x:3, y:3});
         var state7 = state6.getNewState({x:3, y:1});
-        var state8 = state7.getNewState({x:3, y:2});
-        var state9 = state8.getNewState({x:3, y:3});
-        console.log(state9);
-        console.log(state9.availMoves());
-        console.log(this.checkWin('X', state9));
-        console.log(this.checkWin('O', state9));
-        console.log(this.checkDraw(state9));
+        console.log(state7);
+        console.log(this.checkWin('O', state7));
+        console.log(this.checkWin('X', state7));
+        console.log(this.checkDraw(state7));
         */
         /*
         // X's turn first (Computer)
@@ -337,13 +335,16 @@ BasicGame.GameAI.prototype = {
 
         // Cache current turn
         var whichTurn = this.gameObj.turnToOX(this.gameObj.squares.turn);
-        console.log(whichTurn);    
 
         this.squareObj.occupiedBy = whichTurn;
         this.gameObj.renderOX(this.squareObj, whichTurn);
 
         // Unbind event to prevent clicking on cells already clicked
         this.squareObj.spr.events.onInputDown.removeAll();
+
+        console.log(whichTurn);
+        console.log(this.gameObj.squares);
+        console.log(this.gameObj.checkWin(whichTurn, this.gameObj.squares));
 
         if (this.gameObj.checkWin(whichTurn, this.gameObj.squares)) {
             this.gameObj.scores[whichTurn] += 1;
@@ -481,26 +482,32 @@ BasicGame.GameAI.prototype = {
         [3, 1] [3, 2] [3, 3]
         */
         var winBool = false;
-        
         if (state.s11.occupiedBy === OX) {
             if (state.s21.occupiedBy === OX && state.s31.occupiedBy === OX) {
                 winBool = true;
-            } else if (state.s12.occupiedBy === OX && state.s13.occupiedBy === OX) {
-                winBool = true;
-            } else if (state.s22.occupiedBy === OX && state.s33.occupiedBy === OX) {
+            }
+            if (state.s12.occupiedBy === OX && state.s13.occupiedBy === OX) {
                 winBool = true;
             }
-        } else if (state.s12.occupiedBy === OX && state.s22.occupiedBy === OX && state.s32.occupiedBy === OX) {
+            if (state.s22.occupiedBy === OX && state.s33.occupiedBy === OX) {
+                winBool = true;
+            }
+        }
+        if (state.s12.occupiedBy === OX && state.s22.occupiedBy === OX && state.s32.occupiedBy === OX) {
             winBool = true;
-        } else if (state.s13.occupiedBy === OX) {
+        }
+        if (state.s13.occupiedBy === OX) {
             if (state.s23.occupiedBy === OX && state.s33.occupiedBy === OX) {
                 winBool = true;
-            } else if (state.s22.occupiedBy === OX && state.s31.occupiedBy === OX) {
+            }
+            if (state.s22.occupiedBy === OX && state.s31.occupiedBy === OX) {
                 winBool = true;
             }
-        } else if (state.s21.occupiedBy === OX && state.s22.occupiedBy === OX && state.s23.occupiedBy === OX) {
+        }
+        if (state.s21.occupiedBy === OX && state.s22.occupiedBy === OX && state.s23.occupiedBy === OX) {
             winBool = true;
-        } else if (state.s31.occupiedBy === OX && state.s32.occupiedBy === OX && state.s33.occupiedBy === OX) {
+        } 
+        if (state.s31.occupiedBy === OX && state.s32.occupiedBy === OX && state.s33.occupiedBy === OX) {
             winBool = true;
         }
 
