@@ -232,22 +232,29 @@ BasicGame.Game.prototype = {
         if (this.squares.s11.occupiedBy === OX) {
             if (this.squares.s21.occupiedBy === OX && this.squares.s31.occupiedBy === OX) {
                 winBool = true;
-            } else if (this.squares.s12.occupiedBy === OX && this.squares.s13.occupiedBy === OX) {
-                winBool = true;
-            } else if (this.squares.s22.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
+            }
+            if (this.squares.s12.occupiedBy === OX && this.squares.s13.occupiedBy === OX) {
                 winBool = true;
             }
-        } else if (this.squares.s12.occupiedBy === OX && this.squares.s22.occupiedBy === OX && this.squares.s32.occupiedBy === OX) {
+            if (this.squares.s22.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
+                winBool = true;
+            }
+        }
+        if (this.squares.s12.occupiedBy === OX && this.squares.s22.occupiedBy === OX && this.squares.s32.occupiedBy === OX) {
             winBool = true;
-        } else if (this.squares.s13.occupiedBy === OX) {
+        }
+        if (this.squares.s13.occupiedBy === OX) {
             if (this.squares.s23.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
                 winBool = true;
-            } else if (this.squares.s22.occupiedBy === OX && this.squares.s31.occupiedBy === OX) {
+            }
+            if (this.squares.s22.occupiedBy === OX && this.squares.s31.occupiedBy === OX) {
                 winBool = true;
             }
-        } else if (this.squares.s21.occupiedBy === OX && this.squares.s22.occupiedBy === OX && this.squares.s23.occupiedBy === OX) {
+        }
+        if (this.squares.s21.occupiedBy === OX && this.squares.s22.occupiedBy === OX && this.squares.s23.occupiedBy === OX) {
             winBool = true;
-        } else if (this.squares.s31.occupiedBy === OX && this.squares.s32.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
+        }
+        if (this.squares.s31.occupiedBy === OX && this.squares.s32.occupiedBy === OX && this.squares.s33.occupiedBy === OX) {
             winBool = true;
         }
 
