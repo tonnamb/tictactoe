@@ -523,4 +523,4 @@ BasicGame.GameAI.prototype = {
         return drawBool;
     }
 
-}
+};
