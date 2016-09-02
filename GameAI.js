@@ -342,10 +342,6 @@ BasicGame.GameAI.prototype = {
         // Unbind event to prevent clicking on cells already clicked
         this.squareObj.spr.events.onInputDown.removeAll();
 
-        console.log(whichTurn);
-        console.log(this.gameObj.squares);
-        console.log(this.gameObj.checkWin(whichTurn, this.gameObj.squares));
-
         if (this.gameObj.checkWin(whichTurn, this.gameObj.squares)) {
             this.gameObj.scores[whichTurn] += 1;
             this.gameObj.renderScoreBoard();
