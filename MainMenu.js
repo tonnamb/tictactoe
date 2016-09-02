@@ -27,7 +27,7 @@ BasicGame.MainMenu.prototype = {
 		playText.anchor.y = 0.5;
 
 		playText.inputEnabled = true;
-		playText.events.onInputDown.add(this.startGame, this);
+		playText.events.onInputDown.add(this.startAIGame, this);
 
 	},
 
