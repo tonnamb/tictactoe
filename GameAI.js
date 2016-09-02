@@ -14,7 +14,7 @@ BasicGame.GameAI = function (game) {
 
     this.selectStartText = {};
 
-}
+};
 
 BasicGame.GameAI.prototype = {
 
